@@ -1,0 +1,123 @@
+Amy Seo
+505328863
+
+1.	a) 	{ x/A, y/A, z/B }
+   	b) 	Cannot unify since x cannot unify with both A and B, y cannot unify both G(A, B) and G(x, x).
+   	c) 	{ x/B, y/A }
+   	d) 	{ x/John, y/John }
+   	e) 	Cannot unify since x cannot unify with both y and Father(y).
+
+
+2.	a)	(Ax) (Food(x) => Likes(John, x))
+		Food(apples)
+		Food(chicken)
+		(Ay) (((Ex) Eats(x, y) & ~KilledBy(x, y)) => Food(y))
+		(Ax) ((Ey) KilledBy(x, y) => ~Alive(x))
+		Eats(Bill, peanuts) & Alive(Bill)
+		(Ax) (Eats(Bill, x) => Eats(Sue, x))
+
+	b) ~Food(x) | Likes(John, x)
+		Food(apple)
+		Food(chicken)
+		~Eats(x, y) | KilledBy(x, y) | Food(y) 
+		~KilledBy(x, y) | ~Alive(x) 
+		Eats(Bill, peanuts) 
+		Alive(Bill)
+		~Eats(Bill, x) | Eats(Sue, x)
+
+
+	c) Proving that John likes peanuts with resolution:
+		Let alpha = Likes(John, peanuts)
+			~alpha = ~Likes(John, peanuts)
+
+		1. ~Food(x) | Likes(John, x)						KB
+		2. Food(apple)										KB
+		3. Food(chicken)									KB
+		4. ~Eats(x, y) | KilledBy(x, y) | Food(y) 			KB
+		5. ~KilledBy(x, y) | ~Alive(x) 						KB
+		6. Eats(Bill, peanuts) 								KB
+		7. Alive(Bill)										KB
+		8. ~Eats(Bill, y) | Eats(Sue, y)					KB
+		9. ~Likes(John, peanuts)							Query
+		10. ~Food(peanuts)									1,9 {x/peanuts}
+		11. ~Eats(x, peanuts) | KilledBy(x, peanuts)  		4, 10 {y/peanuts}
+		12.	KilledBy(Bill, peanuts)							6, 11 {x/Bill}
+		13. ~Alive(Bill)									5, 12 {x/Bill, y/peanuts}
+		14. CONTRADICTION 									7, 13
+
+		Therefore, since a contradiction was found with ~alpha, it is proven that John likes peanuts.
+
+
+	d)	Question: What does Sue eat? 
+		Let alpha = Sue eats something.
+				  = (Ez) (Eats(Sue, z))
+			~alpha = ~ ((Ez) (Eats(Sue, z)))
+				   = ~Eats(Sue, z)
+
+		1. ~Food(x) | Likes(John, x)						KB
+		2. Food(apple)										KB
+		3. Food(chicken)									KB
+		4. ~Eats(x, y) | KilledBy(x, y) | Food(y) 			KB
+		5. ~KilledBy(x, y) | ~Alive(x) 						KB
+		6. Eats(Bill, peanuts) 								KB
+		7. Alive(Bill)										KB
+		8. ~Eats(Bill, y) | Eats(Sue, y)					KB
+		9. ~(Eats(Sue, z))									Query
+		10. Eats(Sue, peanuts)								6, 8 {y/peanuts}
+
+		Therefore, it is proven that Sue eats peanuts.
+
+
+	e) 	If you don't eat, you die: 
+			(Ax,y) (~Eats(y, x) => Dead(y))
+			Eats(y, x) | Dead(y)
+
+		If you die, you are not alive: 
+			(Ax) (Dead(x) => ~Alive(x))
+			~Dead(x) | ~Alive(x)
+
+		Bill is alive: 
+			Alive(Bill)
+
+		Question: What does Sue eat?
+		Let alpha = Sue eats something.
+				  = (Ez) (Eats(Sue, z))
+			~alpha = ~ ((Ez) (Eats(Sue, z)))
+				   = ~Eats(Sue, z)	
+
+		1. ~Food(x) | Likes(John, x)						KB
+		2. Food(apple)										KB
+		3. Food(chicken)									KB
+		4. ~Eats(x, y) | KilledBy(x, y) | Food(y) 			KB
+		5. ~KilledBy(x, y) | ~Alive(x) 						KB
+		6. Eats(x, y) | Dead(x) 							KB
+		7. ~Dead(x) | ~Alive(x)								KB
+		8. Alive(Bill)										KB
+		9. ~Eats(Bill, y) | Eats(Sue, y)					KB
+		10. ~Eats(Sue, z)									Query
+		11. ~Eats(Bill, y)									9, 10
+		12. Dead(Bill)										6, 11 {x/Bill}
+		13. ~Alive(Bill)									7, 12 {x/Bill}
+		14. CONTRADICTION									8, 13
+
+		Therefore, ~Eats(Sue, z) is unsatisfiable and no conclusion about what Sue eats can be made.
+
+
+3.	(1) Instance with 3 colors is NOT satisfiable.
+
+	(2)	Instance with 4 colors is satisfiable.
+
+	(3) The answers two these two SAT instances tell us that the graph needs a minimum of 4 colors to be properly colored. 
+		Based on the result of Rsat, a valid coloring is:
+				
+		node 1: color 1
+		node 2: color 2
+		node 3: color 3
+		node 4: color 2
+		node 5: color 4
+		node 6: color 3
+		node 7: color 4
+
+	(4) The minimum number of colors required to properly color graph2.txt is 8 colors.
+
+
